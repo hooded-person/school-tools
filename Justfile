@@ -6,22 +6,26 @@ export TYPST_ROOT := root
 default:
   @just --list --unsorted
 
+# update import declaration in lib.typ
+update-lib-imports:
+  echo "#import \"/src/imports.typ\": $(cat "src/imports.typ" | grep -Po "#let +\K(\w+)(?= *= *\(:\))" | paste -sd",")" > '{{TYPST_ROOT}}/src/lib.typ'
+
 # generate manual
-doc:
+doc: update-lib-imports
   typst compile docs/manual.typ docs/manual.pdf
   typst compile docs/thumbnail.typ thumbnail-light.svg
   typst compile --input theme=dark docs/thumbnail.typ thumbnail-dark.svg
 
 # run test suite
-test *args:
+test *args: update-lib-imports
   tt run {{ args }}
 
 # update test cases
-update *args:
+update *args: update-lib-imports
   tt update {{ args }}
 
 # package the library into the specified destination folder
-package target:
+package target: update-lib-imports
   ./scripts/package "{{target}}"
 
 # install the library with the "@local" prefix
