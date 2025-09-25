@@ -1,17 +1,16 @@
 #let check(input, pos: "", source: "", num: true) = {
-  let typeI = type(input)
-  let valid = (typeI == "array") or (num and (typeI == "integer" or typeI == "float"))
+  let valid = (type(input) == array) or (num and (type(input) == int or type(float) == float))
   assert(valid,
     message: "Input" + str(pos) + " is not an array and can not be used as a vector"
   )
 }
 #let convertNumber(v1, v2) = {
-  let len1 = if type(v1) == "array" {v1.len()} else {1}
-  let len2 = if type(v2) == "array" {v2.len()} else {1}
-  if type(v1) != "array" {
+  let len1 = if type(v1) == array {v1.len()} else {1}
+  let len2 = if type(v2) == array {v2.len()} else {1}
+  if type(v1) != array {
     v1 = (v1,) * len2
   }
-  if type(v2) != "array" {
+  if type(v2) != array {
     v2 = (v2,) * len1
   }
   return (v1, v2)
